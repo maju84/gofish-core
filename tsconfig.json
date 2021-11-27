@@ -1,0 +1,22 @@
+{
+    "exclude": [
+        "node_modules",
+        "specs"
+    ],
+    "include": [
+        "./src/**/*"
+    ],
+    "compilerOptions": {
+        "target": "es2019",
+        "module": "commonjs",
+        "sourceMap": false,
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "stripInternal": true
+    }
+}
