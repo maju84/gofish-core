@@ -4,16 +4,20 @@ import { SpielerTyp } from "../value-types/SpielerTyp";
 
 export default class Spieler {
 
+
     get id() { return this._id; }
     private readonly _id: string = uuidv4();
 
-    get Karten() { return this._karten; };
+    get karten() { return this._karten; };
     private _karten: ReadonlyArray<Karte> = [];
 
-    get Saetze() { return this._saetze; };
+    get saetze() { return this._saetze; };
     private _saetze: ReadonlyArray<Karte> = [];
     
-
+    /** @internal */
+    nimmKarte(karte: Karte) {
+        this._karten = [...this._karten, karte];
+    }
 
     constructor(
         public readonly name: string, 

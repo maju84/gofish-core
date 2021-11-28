@@ -29,13 +29,27 @@ describe('Spielablauf vom GoFish Spiel', () => {
     it('Spiel hat 52 Spielkarten und 2 Spieler erhalten', () => {
         const spiel = new Spiel();
 
+        // FIXME I do not like it at all!
+        // this overwrites original implementation with mock impl 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        jest.spyOn<any,any>(spiel,'verteileFuenfKartenAnSpieler').mockImplementation(/* no impl */);
 
         spiel.starten(_spielkarten, _spieler);
 
         expect(spiel.deck.length).toBe(52);
-        expect(spiel.spieler.length).toBe(2);
+        expect(spiel.spieler.length).toBe(2);      
         
+    });
 
+
+    it('Jedem Spieler 5 zufällige Karten vom Deck', () => {
+        const spiel = new Spiel();
+
+        spiel.starten(_spielkarten, _spieler);
+
+        expect(spiel.deck.length).toBe(42);
+        expect(spiel.spieler[0].karten.length).toBe(5);
+        expect(spiel.spieler[1].karten.length).toBe(5);
 
     });
 
