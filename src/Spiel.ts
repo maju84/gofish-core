@@ -1,4 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { Subject } from 'rxjs';
+import { NIL as NIL_UUID, v4 as uuidv4 } from 'uuid';
+import SpielerGewechselt from './domain-events/SpielerGewechselt';
 import Spieler from "./entities/Spieler";
 import Karte from "./value-types/Karte";
 
@@ -13,11 +15,20 @@ export default class Spiel {
     get spieler() { return this._spieler; }
     private _spieler: ReadonlyArray<Spieler> = [];
 
+    get aktuellerSpielerId() { return this._aktuellerSpielerId; }
+    private _aktuellerSpielerId: string = NIL_UUID;
+
+    /* clients may subscribe ONLY ! */
+    get spielerGewechselt() { return this._spielerGewechseltSubject.asObservable(); }
+    private readonly _spielerGewechseltSubject = new Subject<SpielerGewechselt>();
+
+
     starten(spielkarten: Karte[], mitspieler: Mitspieler) {
         this._deck = [...spielkarten];
         this._spieler = [...mitspieler];
 
         this.verteileFuenfKartenAnSpieler();        
+        this.naechsterSpieler();
     }
 
     private verteileFuenfKartenAnSpieler() { 
@@ -35,6 +46,16 @@ export default class Spiel {
         this._deck = [...deck];
         return karte;
     }
+
+    private naechsterSpieler() { 
+        if (this.aktuellerSpielerId === NIL_UUID) {
+            this._aktuellerSpielerId = this.spieler[0].id;
+        }
+        // TODO iterate spieler 
+
+        this._spielerGewechseltSubject.next(new SpielerGewechselt(this.aktuellerSpielerId));
+    }
+
    
 }
 
